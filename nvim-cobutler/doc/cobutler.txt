@@ -1,0 +1,148 @@
+*cobutler.txt*    AI code suggestions for Neovim
+
+==============================================================================
+CONTENTS                                                      *cobutler-contents*
+
+    1. Introduction ........................... |cobutler-introduction|
+    2. Requirements ........................... |cobutler-requirements|
+    3. Installation ........................... |cobutler-installation|
+    4. Configuration .......................... |cobutler-configuration|
+    5. Usage .................................. |cobutler-usage|
+    6. Commands ............................... |cobutler-commands|
+    7. Mappings ............................... |cobutler-mappings|
+    8. API Server ............................. |cobutler-api-server|
+    9. License ................................ |cobutler-license|
+
+==============================================================================
+1. Introduction                                          *cobutler-introduction*
+
+nvim-cobutler is an AI code suggestion plugin for Neovim, similar to GitHub 
+Copilot, but using your local Cobutler API for code completions.
+
+The plugin provides suggestions as you type, displayed as virtual text, 
+which can be accepted or dismissed with simple key mappings.
+
+==============================================================================
+2. Requirements                                          *cobutler-requirements*
+
+- Neovim >= 0.8.0
+- plenary.nvim (https://github.com/nvim-lua/plenary.nvim)
+- Cobutler API server running
+
+==============================================================================
+3. Installation                                          *cobutler-installation*
+
+Using packer.nvim:
+>
+    use {
+      'kirkegaard/nvim-cobutler',
+      requires = { 'nvim-lua/plenary.nvim' }
+    }
+<
+
+Using lazy.nvim:
+>
+    {
+      'kirkegaard/nvim-cobutler',
+      dependencies = { 'nvim-lua/plenary.nvim' }
+    }
+<
+
+==============================================================================
+4. Configuration                                      *cobutler-configuration*
+
+Configure the plugin by calling setup():
+>
+    require('cobutler').setup({
+      -- API settings
+      api_url = "http://localhost:8080", -- URL of your Cobutler API
+      
+      -- Plugin behavior
+      auto_enable = true, -- Enable on startup
+      debounce_ms = 300, -- Delay before requesting suggestion
+      
+      -- Suggestion settings
+      max_lines = 5, -- Maximum number of lines to display
+      
+      -- UI settings
+      virtual_text = {
+        highlight = "Comment",
+        prefix = "▎ ",
+      },
+      
+      -- Keymaps
+      keymaps = {
+        accept = "<Tab>", -- Accept the current suggestion
+        dismiss = "<C-]>", -- Dismiss the current suggestion
+        next_line = "<C-n>", -- Go to next suggestion line (future)
+        prev_line = "<C-p>", -- Go to previous suggestion line (future)
+      },
+      
+      -- Filetype specific settings
+      filetypes = {
+        -- Exclude specific filetypes
+        exclude = {
+          "TelescopePrompt",
+          "neo-tree",
+          "fugitive",
+          "gitcommit",
+          "help",
+        },
+      },
+    })
+<
+
+==============================================================================
+5. Usage                                                      *cobutler-usage*
+
+Once the plugin is installed and configured, it will automatically display
+suggestions as you type in insert mode.
+
+Suggestions will appear as virtual text and can be accepted with <Tab>
+(or your configured accept key) or dismissed with <C-]> (or your configured
+dismiss key).
+
+==============================================================================
+6. Commands                                                *cobutler-commands*
+
+                                                              *:CobutlerEnable*
+:CobutlerEnable          Enable the cobutler plugin
+
+                                                             *:CobutlerDisable*
+:CobutlerDisable         Disable the cobutler plugin
+
+                                                              *:CobutlerToggle*
+:CobutlerToggle          Toggle the cobutler plugin on/off
+
+                                                              *:CobutlerStatus*
+:CobutlerStatus          Show the current status of the plugin
+
+==============================================================================
+7. Mappings                                                *cobutler-mappings*
+
+The following default mappings are available in insert mode:
+
+<Tab>       Accept the current suggestion
+<C-]>       Dismiss the current suggestion
+
+These mappings can be customized in the setup configuration.
+
+==============================================================================
+8. API Server                                            *cobutler-api-server*
+
+Before using the plugin, make sure your Cobutler API server is running:
+
+>
+    # Navigate to your Cobutler directory
+    cd path/to/cobutler
+
+    # Run the server
+    go run cmd/cobutler/main.go
+<
+
+==============================================================================
+9. License                                                  *cobutler-license*
+
+MIT
+
+ vim:tw=78:ts=8:noet:ft=help:norl: 
